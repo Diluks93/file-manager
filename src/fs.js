@@ -2,6 +2,7 @@ import { stdout as output, chdir } from 'process';
 import { fileURLToPath } from 'url';
 import { join, dirname } from 'path';
 import { readdir } from 'fs/promises';
+import { createReadStream } from 'fs';
 
 import { dialog } from './dialog.js';
 
@@ -23,6 +24,15 @@ class FileSystem {
       output.write(getErrorMsg());
     }
   }
+
+  read (pathToFile) {
+    try {
+      const content = createReadStream(pathToFile, 'utf8');
+      output.write(content);
+    } catch (err) {
+      output.write(getErrorMsg());
+    }
+  };
 
   changeDirectory(directory) {
     try {

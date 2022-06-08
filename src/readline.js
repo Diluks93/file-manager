@@ -5,8 +5,8 @@ import { homedir } from 'os';
 import { fileSystem } from './fs.js';
 import { dialog } from './dialog.js';
 
-const { list, changeDirectory } = fileSystem;
 const { getFarewell, getNamePathDirectory, getInvalidMsg } = dialog;
+const { list, changeDirectory, read } = fileSystem;
 
 export const readline = (username) => {
   const rl = createInterface({ input, output });
@@ -42,7 +42,7 @@ export const readline = (username) => {
         list(`${cwd()}`);
         break;
       case 'cat':
-        console.log('cat');
+        read(`${args[0]}`);
         break;
       case 'add':
         console.log('add');
