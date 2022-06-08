@@ -1,0 +1,26 @@
+{
+  "name": "file-manager",
+  "version": "1.0.0",
+  "description": "this app is File Manager using Node.js APIs",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Diluks93/file-manager.git"
+  },
+  "keywords": [
+    "nodejs",
+    "diluks93",
+    "file-manager"
+  ],
+  "author": "diluks93",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Diluks93/file-manager/issues"
+  },
+  "homepage": "https://github.com/Diluks93/file-manager#readme"
+}
