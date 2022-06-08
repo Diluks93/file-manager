@@ -1,17 +1,22 @@
-import { stdin as input, stdout as output } from 'process';
+import { stdin as input, stdout as output, chdir, cwd } from 'process';
 import { createInterface } from 'readline';
 import { homedir } from 'os';
 
-import { getFarewell, getNamePathDirectory } from './dialog.js';
+import { fileSystem } from './fs.js';
+import { dialog } from './dialog.js';
+
+const { list, changeDirectory } = fileSystem;
+const { getFarewell, getNamePathDirectory, getInvalidMsg } = dialog;
 
 export const readline = (username) => {
   const rl = createInterface({ input, output });
 
-  process.chdir(homedir());
-  output.write(getNamePathDirectory(process.cwd()) + '\n');
+  chdir(homedir());
+  output.write(getNamePathDirectory(cwd()) + '\n');
 
   rl.on('line', line => {
     checkInput(line);
+    output.write(getNamePathDirectory(cwd()) + '\n');
   });
 
   rl.on('SIGINT', () => {
@@ -19,22 +24,22 @@ export const readline = (username) => {
     rl.close();
   });
 
-  const checkInput = (line) => {
-    switch(line) {
+  const checkInput = async (line) => {
+    const [command, ...args] = line.split(' ');
+    switch(command) {
       case '.exit':
         output.write(getFarewell(username));
         rl.close();
         break;
       case 'up':
       case '..':
-        process.chdir('..');
-        output.write(getNamePathDirectory(process.cwd()) + '\n');
+        chdir('..');
         break;
       case 'cd':
-        console.log('cd');
+        changeDirectory(args[0]);
         break;
       case 'ls':
-        console.log('ls');
+        list(`${cwd()}`);
         break;
       case 'cat':
         console.log('cat');
