@@ -5,10 +5,12 @@ import { homedir } from 'os';
 import { operationSystem }from  './os.js';
 import { fileSystem } from './fs.js';
 import { dialog } from './dialog.js';
+import { calcHash } from './calc-hash.js';
 
 const { getFarewell, getNamePathDirectory, getInvalidMsg } = dialog;
 const { showIntoDirectory, changeDirectory, createNewFile, openFile, renameFile, copyFile, remove } = fileSystem;
 const { showEndOfLine, getCpusCount, getCpusModel, getHomedir, getUsername, getArchitecture } = operationSystem;
+const { calculateHash } = calcHash
 
 export const readline = (username) => {
   const rl = createInterface({ input, output });
@@ -88,7 +90,7 @@ export const readline = (username) => {
         }
         break;
       case 'hash':
-        console.log('hash');
+        calculateHash(args[0]);
         break;
       case 'compress':
         console.log('compress');
