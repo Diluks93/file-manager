@@ -1,33 +1,37 @@
 import { stdout as output, env, arch  } from 'process';
 import { EOL, cpus, userInfo } from 'os';
 
+import { dialog } from './dialog.js';
+
+const { getInfoAboutCpus, getInfoAboutCpusModel, getInfoHomedir, getInfoAboutArchitecture, getInfoAboutUsername, getEndOfLine } = dialog;
+
 class OperationSystem {
   showEndOfLine() {
     if (EOL === '\r\n') {
-      output.write('\\r\\n' + EOL);
+      output.write(getEndOfLine('\\r\\n'));
     } else if (EOL === '\\n') {
-      output.write('\\n' + EOL);
+      output.write(getEndOfLine('\\n'));
     }
   }
 
   getCpusCount() {
-    output.write(`Overall amount of CPUS ${cpus().length}` + EOL);
+    output.write(getInfoAboutCpus(cpus().length));
   }
 
   getCpusModel() {
-    output.write(cpus().map(({model, speed}) => `Model: ${model}${EOL}Speed: ${speed}`).join(EOL) + EOL);
+    output.write(cpus().map(getInfoAboutCpusModel).join(EOL) + EOL);
   }
 
   getHomedir() {
-    output.write(`Home directory: ${env.HOME}` + EOL);
+    output.write(getInfoHomedir(env.HOME));
   }
 
   getUsername() {
-    output.write(`Username: ${userInfo().username}` + EOL);
+    output.write(getInfoAboutUsername(userInfo().username));
   }
 
   getArchitecture() {
-    output.write(`Architecture: ${arch}` + EOL);
+    output.write(getInfoAboutArchitecture(arch));
   }
 }
 
