@@ -2,11 +2,13 @@ import { stdin as input, stdout as output, chdir, cwd } from 'process';
 import { createInterface } from 'readline';
 import { homedir } from 'os';
 
+import { operationSystem }from  './os.js';
 import { fileSystem } from './fs.js';
 import { dialog } from './dialog.js';
 
 const { getFarewell, getNamePathDirectory, getInvalidMsg } = dialog;
-const { showIntoDirectory, changeDirectory, createNewFile, openFile, renameFile, copyFile, remove, mv } = fileSystem;
+const { showIntoDirectory, changeDirectory, createNewFile, openFile, renameFile, copyFile, remove } = fileSystem;
+const { showEndOfLine, getCpusCount, getCpusModel, getHomedir, getUsername, getArchitecture } = operationSystem;
 
 export const readline = (username) => {
   const rl = createInterface({ input, output });
@@ -59,20 +61,31 @@ export const readline = (username) => {
       case 'rm':
         remove(args[0]);
         break;
-      case 'os --EOL':
-        console.log('os --EOL');
-        break;
-      case 'os --cpus':
-        console.log('os --cpus');
-        break;
-      case 'os --homedir':
-        console.log('os --homedir');
-        break;
-      case 'os --username':
-        console.log('os --username');
-        break;
-      case 'os --architecture':
-        console.log('os --architecture');
+      case 'os':
+        switch (args[0]) {
+          case '--EOL':
+            showEndOfLine();
+            break;
+          case '--cpus':
+            getCpusCount();
+            getCpusModel();
+            break;
+          case '--homedir':
+            getHomedir();
+            break;
+          case '--username':
+            getUsername();
+            break;
+          case '--architecture':
+          case '--arch':
+            getArchitecture();
+            break;
+          case '--help':
+            console.log('--help');
+            break;
+          default:
+            output.write(getInvalidMsg());
+        }
         break;
       case 'hash':
         console.log('hash');
