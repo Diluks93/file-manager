@@ -1,19 +1,13 @@
 import { stdout as output, chdir } from 'process';
-import { fileURLToPath } from 'url';
-import { join, dirname } from 'path';
-import { readdir } from 'fs/promises';
-import { createReadStream } from 'fs';
+import { readdir, rm } from 'fs/promises';
+import { createReadStream, createWriteStream, rename, unlink } from 'fs';
 
 import { dialog } from './dialog.js';
 
 const { getErrorMsg } = dialog;
 
 class FileSystem {
-  constructor() {
-    //this.__dirname = dirname(fileURLToPath(import.meta.url));
-  }
-
-  async list(directory) {
+  async showIntoDirectory(directory) {
     try {
       const files = await readdir( directory);
       files.forEach(file => {
@@ -21,24 +15,68 @@ class FileSystem {
         output.write(filename);
       });
     } catch (err) {
-      output.write(getErrorMsg());
+      getErrorMsg();
     }
   }
-
-  read (pathToFile) {
-    try {
-      const content = createReadStream(pathToFile, 'utf8');
-      output.write(content);
-    } catch (err) {
-      output.write(getErrorMsg());
-    }
-  };
 
   changeDirectory(directory) {
     try {
       chdir(`./${directory}`);
     } catch (err) {
-      output.write(getErrorMsg());
+      getErrorMsg();
+    }
+  }
+
+  openFile(pathToFile) {
+    const stream = createReadStream(pathToFile);
+    stream.on('error', getErrorMsg);
+    stream.pipe(output);
+  };
+
+  createNewFile(pathToFile) {
+    const stream = createWriteStream(pathToFile);
+    stream.on('error', getErrorMsg);
+    stream.close();
+  }
+
+  renameFile(oldFilename, newFilename) {
+    rename(oldFilename, newFilename, (err) => {
+      if (err) {
+        if (err.code === 'EXDEV') {
+          this.copyFile();
+        } else {
+          getErrorMsg();
+        }
+        return;
+      }
+    });
+  }
+
+  copyFile(from, to, isMoved = false) {
+    const readStream  = createReadStream(from);
+    const writeStream = createWriteStream(to);
+
+    readStream.on('error', getErrorMsg);
+    writeStream.on('error', getErrorMsg);
+
+    if (isMoved) {
+      readStream.on('close', () => {
+        unlink(from, (err) => {
+          if (err) {
+            getErrorMsg();
+          }
+        });
+      });
+    };
+
+    readStream.pipe(writeStream);
+  }
+
+  async remove(path) {
+    try {
+      await rm(path);
+    } catch (err) {
+      getErrorMsg();
     }
   }
 }

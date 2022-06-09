@@ -6,7 +6,7 @@ import { fileSystem } from './fs.js';
 import { dialog } from './dialog.js';
 
 const { getFarewell, getNamePathDirectory, getInvalidMsg } = dialog;
-const { list, changeDirectory, read } = fileSystem;
+const { showIntoDirectory, changeDirectory, createNewFile, openFile, renameFile, copyFile, remove, mv } = fileSystem;
 
 export const readline = (username) => {
   const rl = createInterface({ input, output });
@@ -39,25 +39,25 @@ export const readline = (username) => {
         changeDirectory(args[0]);
         break;
       case 'ls':
-        list(`${cwd()}`);
+        showIntoDirectory(`${cwd()}`);
         break;
       case 'cat':
-        read(`${args[0]}`);
+        openFile(args[0]);
         break;
       case 'add':
-        console.log('add');
+        createNewFile(args[0]);
         break;
       case 'rn':
-        console.log('rn');
+        renameFile(args[0], args[1]);
         break;
       case 'cp':
-        console.log('cp');
+        copyFile(args[0], args[1]);
         break;
       case 'mv':
-        console.log('mv');
+        copyFile(args[0], args[1], true);
         break;
       case 'rm':
-        console.log('rm');
+        remove(args[0]);
         break;
       case 'os --EOL':
         console.log('os --EOL');

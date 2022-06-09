@@ -16,7 +16,7 @@ class Dialog {
   }
 
   getErrorMsg () {
-    return `\x1b[31mOperation failed\n\x1b[0m`;
+    process.stdout.write(`\x1b[31mOperation failed\n\x1b[0m`);
   }
 }
 
