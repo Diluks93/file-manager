@@ -7,11 +7,7 @@ const { getInfoAboutCpus, getInfoAboutCpusModel, getInfoHomedir, getInfoAboutArc
 
 class OperationSystem {
   showEndOfLine() {
-    if (EOL === '\r\n') {
-      output.write(getEndOfLine('\\r\\n'));
-    } else if (EOL === '\\n') {
-      output.write(getEndOfLine('\\n'));
-    }
+    output.write(getEndOfLine(JSON.stringify(EOL)));
   }
 
   getCpusCount() {
