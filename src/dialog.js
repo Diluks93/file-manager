@@ -24,7 +24,7 @@ class Dialog {
   }
 
   getInfoAboutCpusModel ({model, speed}) {
-    return `Model: ${model}\nSpeed: ${speed}`;
+    return `Model: ${model}\nSpeed: ${Math.round(speed/1000)} GHz\n`;
   }
 
   getInfoHomedir (env) {
